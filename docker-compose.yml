@@ -1,0 +1,65 @@
+services:
+  backend:
+    build:
+      context: ./backend-control-ventas
+    container_name: backend-container
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production 
+    depends_on:
+      - mysql-db
+    networks:
+      - red-control-ventas
+    env_file:
+      - ./backend-control-ventas/.env.production 
+
+  frontend:
+    build:
+      context: ./frontend-control-ventas
+    container_name: frontend-container
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - red-control-ventas
+
+  mysql-db:
+    image: mysql
+    container_name: mysql-ventas-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root157
+      MYSQL_DATABASE: bd_control_ventas
+      MYSQL_USER: aragosand
+      MYSQL_PASSWORD: programa-escolar12345
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - red-control-ventas
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    restart: always
+    environment:
+      PMA_HOST: mysql-ventas-container
+      MYSQL_ROOT_PASSWORD: root157
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql-db
+    networks:
+      - red-control-ventas
+
+volumes:
+  db_data: 
+
+networks:
+  red-control-ventas:
+    driver: bridge
