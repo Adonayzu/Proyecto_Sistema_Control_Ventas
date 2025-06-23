@@ -34,8 +34,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root157
       MYSQL_DATABASE: bd_control_ventas
-      MYSQL_USER: aragosand
-      MYSQL_PASSWORD: programa-escolar12345
+      MYSQL_USER: ventas
+      MYSQL_PASSWORD: programa-escolar
     ports:
       - "3306:3306"
     volumes:
